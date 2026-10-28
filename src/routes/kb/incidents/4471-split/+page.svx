@@ -1,0 +1,67 @@
+---
+layout: runbook
+title: '#4471 split · three problems, not one'
+owner: Maciek Sitkowski
+status: open
+reviewed: 2026-10-28
+signature: Maciek Sitkowski
+---
+
+<script>
+  import ProblemTable from '#lib/kb/ProblemTable.svelte';
+  import ProblemCount from '#lib/kb/ProblemCount.svelte';
+  import Callout from '#lib/kb/Callout.svelte';
+  import RenderStamp from '#lib/kb/RenderStamp.svelte';
+</script>
+
+[#4471](/kb/incidents/4471) holds <ProblemCount ticket={4471} /> reports about dates, merged on
+subject line ([decision 0001](/kb/decisions/0001-dedupe-by-subject)) and marked known: one issue,
+one fix queued. Read by tenant, channel and body, they are three problems, and the queued parser
+fix closes only the first. Each now has its own ticket.
+
+<Callout kind="warn">
+Closing #4471 when the parser fix ships leaves the booking-v3 hint and the one-day moves open,
+with nobody assigned to them.
+</Callout>
+
+## The split
+
+<ProblemTable ticket={4471} />
+
+Counts are built from `reports-4471.json` and `desk-notes.json` at render time. A report the
+export repeats counts once. A tenant who is not on file lands in a "needs triage" row, not in a
+problem.
+
+## 1 · The shared parser reads day-first dates month first ([#1](https://github.com/sitek94/mega-s01e03-what-it-shows/issues/1))
+
+This is the bug #4471 was named for, and it covers <ProblemCount ticket={4471} problem="parser" />
+reports. Every tenant on file writes the day first, and the parser reads the month first, so
+7 April arrives as 4 July. These reports came in through the app, by email, or through the
+booking-v2 form.
+
+## 2 · The booking-v3 hint asks for month first ([#2](https://github.com/sitek94/mega-s01e03-what-it-shows/issues/2))
+
+It covers <ProblemCount ticket={4471} problem="hint" /> reports, all through the booking form of
+tenants that run booking-v3. That form prints `MM/DD/YYYY` under its date field; people type what
+it asks, and the form reads the value day first. The report reads like a parser report, so the
+subject rule merged it. The fix is the hint or the form, not the parser.
+
+## 3 · Dates that move by one day ([#3](https://github.com/sitek94/mega-s01e03-what-it-shows/issues/3))
+
+It covers <ProblemCount ticket={4471} problem="one-day" /> reports: the ones the desk itself listed
+as one-day moves in `desk-notes.json`. A Tuesday shows as Monday; one meeting lands on different
+days in Lisbon and Toronto. A day/month swap cannot do that. The likely cause is a time zone on the
+invite date (not confirmed). `CauseTable` on the #4471 page still files them under `parser` and
+only footnotes them.
+
+## What the queue shows
+
+- **The intake tag follows the browser, not the tenant.** Intake tags a report `hint` when the
+  reporter's browser is `en-US`. The parser and the hint rows both carry both tags.
+- **Same subject, different problem.** Every subject line on the hint and one-day reports also
+  appears on parser reports, so the subject rule could not have split them. Read the channel and
+  the tenant's form (`causes.ts`) before merging into a big ticket.
+- **Keep the one-day list current.** Problem 3 is only as complete as `oneDayMove` in
+  `desk-notes.json`. New one-day reports belong there; this page picks them up on the next build.
+
+<RenderStamp {signature} />
