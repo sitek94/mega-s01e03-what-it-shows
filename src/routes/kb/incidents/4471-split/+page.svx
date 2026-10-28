@@ -4,7 +4,7 @@ title: '#4471 split · three problems, not one'
 owner: Maciek Sitkowski
 status: closed
 reviewed: 2026-10-28
-signature: Maciek Sitkowski
+signature: 'v1.eyJzdG9yeSI6Im9mZiIsInN1YiI6IjQ0OCIsImF1ZCI6ImNoYWxsZW5nZTp3aGF0LWl0LXNob3dzIiwiaWF0IjoxNzkzMjA5NjY4LCJleHAiOjE3OTMyOTYwNjh9.gvWPByMjn8C9eE65MFkq5gcEoANMQw1ok7FPbOY1MZk'
 ---
 
 <script>
