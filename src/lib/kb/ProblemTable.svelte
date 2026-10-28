@@ -33,7 +33,7 @@
       {@const p = PROBLEMS[g.problem]}
       <tr class:open={p.issue === null}>
         <td>{p.title}</td>
-        <td>{g.reports.length}</td>
+        <td>{g.reports.length}{#if g.alsoIn.length}<span class="small"> · also in {g.alsoIn.join(', ')}</span>{/if}</td>
         <td>{g.tenants}</td>
         <td class="small">{list(g.channels)}</td>
         <td class="small">{list(g.taggedAs)}</td>
@@ -43,6 +43,14 @@
     {/each}
   </tbody>
 </table>
+
+{#each split.groups.filter((g) => g.alsoIn.length) as g (g.problem)}
+  <p class="small">
+    The {g.reports.length} {g.problem} reports are counted twice: in their own row, and under
+    <code>{g.alsoIn.join(', ')}</code>, where the desk files them by tenant, as its own view
+    (CauseTable on #{ticket}) counts them.
+  </p>
+{/each}
 
 <style>
   .sum { font-size: 1.1rem; }

@@ -28,16 +28,17 @@ with nobody assigned to them.
 
 <ProblemTable ticket={4471} />
 
-Counts are built from `reports-4471.json` and `desk-notes.json` at render time. A report the
-export repeats counts once. A tenant who is not on file lands in a "needs triage" row, not in a
-problem.
+Counts are built from `reports-4471.json` and `desk-notes.json` at render time, with the desk's own
+view: a report the export repeats counts once, under the cause the desk files it under. The one-day
+row counts its reports a second time. A tenant who is not on file lands in a "needs triage" row,
+not in a problem.
 
 ## 1 · The shared parser reads day-first dates month first ([#1](https://github.com/sitek94/mega-s01e03-what-it-shows/issues/1))
 
 This is the bug #4471 was named for, and it covers <ProblemCount ticket={4471} problem="parser" />
 reports. Every tenant on file writes the day first, and the parser reads the month first, so
 7 April arrives as 4 July. These reports came in through the app, by email, or through the
-booking-v2 form.
+booking-v2 form. The count includes the one-day moves (problem 3), because the desk files them here.
 
 ## 2 · The booking-v3 hint asks for month first ([#2](https://github.com/sitek94/mega-s01e03-what-it-shows/issues/2))
 
@@ -51,8 +52,8 @@ subject rule merged it. The fix is the hint or the form, not the parser.
 It covers <ProblemCount ticket={4471} problem="one-day" /> reports: the ones the desk itself listed
 as one-day moves in `desk-notes.json`. A Tuesday shows as Monday; one meeting lands on different
 days in Lisbon and Toronto. A day/month swap cannot do that. The likely cause is a time zone on the
-invite date (not confirmed). `CauseTable` on the #4471 page still files them under `parser` and
-only footnotes them.
+invite date (not confirmed). The desk files them under `parser` by tenant, so they stay counted
+there too; this row is what the queued parser fix will not close.
 
 ## What the queue shows
 
