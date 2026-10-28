@@ -2,7 +2,7 @@
 layout: runbook
 title: '#4471 split · three problems, not one'
 owner: Maciek Sitkowski
-status: open
+status: closed
 reviewed: 2026-10-28
 signature: Maciek Sitkowski
 ---
